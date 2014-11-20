@@ -25,7 +25,7 @@ def valor_combobox(combobox):
 class MainGui:
     def __init__(self):
         self.widgets = gtk.glade.XML("Descuentos.glade")
-	self.widgets = gtk.glade.XML("AcercaDe.glade")
+	self.widgets2 = gtk.glade.XML("AcercaDe.glade")
 	
         signals = { "on_entry1_changed" : self.cuentas,
 	            "on_combobox1_changed": self.cuentas,
