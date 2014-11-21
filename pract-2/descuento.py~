@@ -59,7 +59,7 @@ class MainGui:
 	label = gtk.Label("<b>Calculadora de descuentos 1.0</b>\n")
 	label2 = gtk.Label("10%,20% sobre el precio a introducir\n\n                Juan Diego Arias Martin")
 	label3=gtk.Label("")	
-	label3.set_markup("<a href=\"http://www.google.es\" " "title=\"Google\">Google</a>")
+	label3.set_markup("<a href=\"http://www.google\" " "title=\"Google\">Google</a>")
 	label.set_property("use-markup", True)
 	ventana.vbox.pack_start(label, True, True, 0)
 	ventana.vbox.pack_start(label2, True, True, 0)
