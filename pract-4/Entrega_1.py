@@ -27,6 +27,12 @@ class MainWin:
 		self.widgets  = gtk.glade.XML("Entrega_1.glade")
 
 		window1 = self.widgets.get_widget("window1")
+		self.treeView=self.widgets.get_widget("treeView")
+		self.entry1=self.widgets.get_widget("entry1")
+		self.entry2=self.widgets.get_widget("entry2")
+		self.entry3=self.widgets.get_widget("entry3")
+		self.entry4=self.widgets.get_widget("entry4")
+		self.entry5=self.widgets.get_widget("entry5")
 
 #*********************************************************************************************************
 		
@@ -38,6 +44,7 @@ class MainWin:
 		signals = {"on_button1_clicked" : self.on_button1_clicked,
 			"on_button2_clicked": self.on_button2_clicked,
 			"on_button3_clicked": self.on_button3_clicked,
+			
 			"gtk_main_quit" : gtk.main_quit
 			 }
 
@@ -85,32 +92,42 @@ class MainWin:
 #Boton Listar.
 	def on_button3_clicked(self, bbdd):
 		ventana = gtk.Dialog()
+
 		ok_button = ventana.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
 		cancelar_button = ventana.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+		self.borrar_button=ventana.add_button(gtk.STOCK_DELETE, gtk.RESPONSE_CLOSE)		
+		self.borrar_button.connect("clicked",self.on_button_delete_clicked)
 		ok_button.grab_default()
+		
 		ventana.set_title("Listar")
 		
-		listStore = gtk.ListStore(str, str)
-		treeView = gtk.TreeView(listStore)
+		listStore = gtk.ListStore(str, str, str, str, str)
+		self.treeView=gtk.TreeView(listStore)
+		self.selection=self.treeView.get_selection()
+		self.selection.connect("changed",self.on_changed)
 	
-
-		renderer = gtk.CellRendererText()
-		
-		column = gtk.TreeViewColumn("Title", renderer, text=0)
-	
-		
 		c.execute('SELECT * FROM tusuario;')
 
 		for x in c.fetchall():
-			#entry1 = gtk.Label("Nombre: "+x[3]+" - Apellidos: "+x[4])
-			column.append(x[0],x[1])
-			
-			ventana.vbox.pack_start(entry1, True, True, 0)
-
+			listStore.append([x[0],x[1],x[2],x[3],x[4]])
 		
-		nombre = gtk.treeView("nombre",renderer,text=0)
-		nombre = gtk.treeView("apellido",renderer,text=1)
-		treeView.append_column(column)
+		renderer = gtk.CellRendererText()
+		
+		column = gtk.TreeViewColumn("usuario", renderer, text=0)
+		column1 = gtk.TreeViewColumn("contraseña", renderer, text=1)
+		column2 = gtk.TreeViewColumn("email", renderer, text=2)
+		column3 = gtk.TreeViewColumn("nombre", renderer, text=3)
+		column4 = gtk.TreeViewColumn("apellidos", renderer, text=4)
+		
+		
+		self.treeView.set_model(listStore)
+		self.treeView.append_column(column)
+		self.treeView.append_column(column1)
+		self.treeView.append_column(column2)
+		self.treeView.append_column(column3)
+		self.treeView.append_column(column4)
+
+		ventana.vbox.pack_start(self.treeView, True, True, 0)
 		
 
 		# Con show_all() mostramos el contenido del cuadro de dialogo (en este
@@ -136,6 +153,15 @@ class MainWin:
 
 		c.execute('insert into tusuario(usuario,contrasena,email,nombre,apelidos,direccion) values ("'+str(usuario)+'","'+str(contrasena)+'","'+str(email)+'","'+str(nombre)+'","'+str(apellidos)+'","'+str(direccion)+'")')
 		conex.commit()
+
+	def on_changed(self, selection):
+		self.modelo, self.treeiter=selection.get_selected()
+#Boton Borrar
+
+	def on_button_delete_clicked(self,bbdd):
+		c.execute("DELETE FROM tusuario WHERE email='"+self.modelo[self.treeiter][2]+"';")
+		conex.commit()
+
 
 
 # Para terminar iniciamos el programa
