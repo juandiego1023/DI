@@ -1,0 +1,37 @@
+   <?php
+
+       $nombre = $_GET['nombre'];
+
+       $apellidos = $_GET['apellidos'];
+
+       $edad = $_GET['edad'];
+
+       $peso = $_GET['peso'];
+
+       $sekso= $_GET['sekso'];
+
+       $estadoCivil=$_GET['estadoCivil'];
+
+       $aficiones=$_GET['aficion'];
+
+       echo "<br/>   DATOS RECIBIDOS";
+
+       echo "<br/>   Nombre: ". $nombre;
+
+       echo "<br/>   Apellidos: ". $apellidos;
+
+       echo "<br/>   Edad: ". $edad."<br/>";
+
+       echo "<br/>   Peso: ". $peso;
+
+       echo "<br/>   Sexo: ". $sekso;
+
+       echo "<br/>   Estado civil: ". $estadoCivil;
+
+       echo "<br/>   Aficion: ";
+       foreach($aficiones as $aficion){
+       	echo $aficion;
+       }
+	
+
+?>
